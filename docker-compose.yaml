@@ -5,9 +5,10 @@ services:
         container_name: servernode
         build:
             context: ./node
-        entrypoint: dockerize -wait tcp://db:3306 -timeout 50s docker-entrypoint.sh
+        entrypoint: dockerize -wait tcp://db:3306 -timeout 60s docker-entrypoint.sh
         volumes: 
             - ./node:/usr/src/app
+            - ./node/node_modules:/usr/src/app/node_modules
         ports:
             - "5000:5000"
         networks: 
@@ -15,6 +16,8 @@ services:
         depends_on: 
             - db
         command: 'node index'
+        tty: true
+        restart: always
     nginx:
         restart: always
         build:
